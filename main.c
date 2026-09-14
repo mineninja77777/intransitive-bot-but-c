@@ -1,16 +1,19 @@
+
+#include "move.h"
+#include "board.h"
+
 #include <stdio.h>
-#include "board.c"
-#include "move.c"
 
 int main() {
 
-    while (1) {
-        char line[20];
-        fgets(line, sizeof(line), stdin);
-        Move move = process_move(line);
-        printf("%d, %d, %d\n", move.from, move.to, move.capture);
-    }
-
+    // while (1) {
+    //     char line[20];
+    //     fgets(line, sizeof(line), stdin);
+    //     Move move = process_move(line);
+    //     printf("%d, %d, %d\n", move.from, move.to, move.capture);
+    // }
+    init_board();
+    output_board();
 
     // init_board();
     // output_board();

@@ -1,11 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef struct {
-    int from;
-    int to;
-    int capture; // to help with unmoving, if the move was a capture then it would say the piece type (just counting following order of the items in struct Board), otherwise zero
-} Move;
+#include "move.h"
 
 // moves should be formatted as (([a-i][1-9])-\2)|(([a-i][1-9])x\4([br][rsp])?) to comply with https://rps.henhen1227.com/account/bots/connect while also allowing for capture field
 //                                from-to       or  fromxto      or fromxtocapture
