@@ -1,8 +1,8 @@
+#include <stdio.h>
 
 #include "move.h"
 #include "board.h"
 
-#include <stdio.h>
 
 int main() {
 

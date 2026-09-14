@@ -1,16 +1,6 @@
-// typedef struct {
-//     unsigned long long high; // 64 to 80
-//     unsigned long long low; // squares 0 to 63
-// } BitBoard;
-typedef unsigned __int128 BitBoard;
-typedef struct {
-    BitBoard blueR;
-    BitBoard blueS;
-    BitBoard blueP;
-    BitBoard redR;
-    BitBoard redS;
-    BitBoard redP;
-} Board;
+#include <stdio.h>
+
+#include "board.h"
 
 Board board;
 
