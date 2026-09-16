@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "move.h"
 #include "board.h"
@@ -6,31 +8,22 @@
 
 int main() {
 
-    // while (1) {
-    //     char line[20];
-    //     fgets(line, sizeof(line), stdin);
-    //     Move move = process_move(line);
-    //     printf("%d, %d, %d\n", move.from, move.to, move.capture);
-    // }
-    init_board();
-    output_board();
 
     // init_board();
     // output_board();
-    // BitBoard bb = {0,0};
     // int address;
+    // Move move;
     // for (;;) {
-    //     output_bitboard(bb);
-    //     printf("board: %llu %llu\n", bb.high, bb.low);
-    //     printf("input number: ");
+    //     printf("input move: ");
 
-    //     char line[20];
+    //     char line[8];
     //     fgets(line, sizeof(line), stdin);
-    //     sscanf(line, "%d", &address);
-    //     if (address > 81) {
-    //         return 0;
+    //     if (strncmp(line, "undo", 4) == 0) {
+    //         unmake_move(move);
+    //     } else {
+    //         move = process_move(line);
+    //         make_move(move);
     //     }
-        
-    //     set_bit(&bb, address, 1);
+    //     output_board();
     // }
 }

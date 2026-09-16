@@ -4,7 +4,7 @@
 typedef struct {
     int from;
     int to;
-    int capture; // to help with unmoving, if the move was a capture then it would say the piece type (just counting following order of the items in struct Board), otherwise zero
+    int capture; // to help with unmoving, as pieces can only capture one type of piece it is 0 or 1
 } Move;
 
 Move process_move(char* movestr);

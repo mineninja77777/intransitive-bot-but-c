@@ -1,17 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 
+#include "moves.h"
+#include "move.h"
 #include "board.h"
 
 Board board;
+int turn; // 0: blue, 1: red
 
 void init_board() {
     BitBoard blueR = ((BitBoard)4 << 64) + 72127962782105600;
-    BitBoard blueS = ((BitBoard)0 << 64) + 288512126006329344;
+    BitBoard blueS = 288512126006329344;
     BitBoard blueP = ((BitBoard)8 << 64) + 144256063003164672;
     BitBoard redR = 17196662784;
     BitBoard redS = 4402345672704;
     BitBoard redP = 8804691353600;
     board = (Board){blueR, blueS, blueP, redR, redS, redP};
+    turn = 0;
 }
 
 int get_bit(BitBoard board, int bit) {
@@ -23,6 +28,71 @@ void set_bit(BitBoard *board, int bit, int value) {
         return;
     }
     (*board) ^= (BitBoard)1 << bit;
+}
+
+// assumes move is valid
+void make_move(Move move) {
+    if (get_bit(board.blueP, move.from)) {
+        set_bit(&board.blueP, move.from, 0);
+        set_bit(&board.blueP, move.to, 1);
+        set_bit(&board.redR, move.to, 0); // could only be taking enemy rock
+    } else if (get_bit(board.blueS, move.from)) {
+        set_bit(&board.blueS, move.from, 0);
+        set_bit(&board.blueS, move.to, 1);
+        set_bit(&board.redP, move.to, 0);
+    } else if (get_bit(board.blueR, move.from)) {
+        set_bit(&board.blueR, move.from, 0);
+        set_bit(&board.blueR, move.to, 1);
+        set_bit(&board.redS, move.to, 0);
+    } else if (get_bit(board.redP, move.from)) {
+        set_bit(&board.redP, move.from, 0);
+        set_bit(&board.redP, move.to, 1);
+        set_bit(&board.blueR, move.to, 0);
+    } else if (get_bit(board.redS, move.from)) {
+        set_bit(&board.redS, move.from, 0);
+        set_bit(&board.redS, move.to, 1);
+        set_bit(&board.blueP, move.to, 0);
+    } else if (get_bit(board.redR, move.from)) {
+        set_bit(&board.redR, move.from, 0);
+        set_bit(&board.redR, move.to, 1);
+        set_bit(&board.blueS, move.to, 0);
+    } else {
+        printf("Invalid move\n");
+    } 
+}
+
+void unmake_move(Move move) {
+    if (get_bit(board.blueP, move.to)) {
+        set_bit(&board.blueP, move.from, 1);
+        set_bit(&board.blueP, move.to, 0);
+        set_bit(&board.redR, move.to, move.capture); // could only be taking enemy rock
+    } else if (get_bit(board.blueS, move.to)) {
+        set_bit(&board.blueS, move.from, 1);
+        set_bit(&board.blueS, move.to, 0);
+        set_bit(&board.redP, move.to, move.capture);
+    } else if (get_bit(board.blueR, move.to)) {
+        set_bit(&board.blueR, move.from, 1);
+        set_bit(&board.blueR, move.to, 0);
+        set_bit(&board.redS, move.to, move.capture);
+    } else if (get_bit(board.redP, move.to)) {
+        set_bit(&board.redP, move.from, 1);
+        set_bit(&board.redP, move.to, 0);
+        set_bit(&board.blueR, move.to, move.capture);
+    } else if (get_bit(board.redS, move.to)) {
+        set_bit(&board.redS, move.from, 1);
+        set_bit(&board.redS, move.to, 0);
+        set_bit(&board.blueP, move.to, move.capture);
+    } else if (get_bit(board.redR, move.to)) {
+        set_bit(&board.redR, move.from, 1);
+        set_bit(&board.redR, move.to, 0);
+        set_bit(&board.blueS, move.to, move.capture);
+    } else {
+        printf("Invalid move\n");
+    } 
+}
+
+void generate_moves(Move moves[80]) {
+    // TODO: yeah this
 }
 
 void output_bitboard(BitBoard board) {
