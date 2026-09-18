@@ -16,6 +16,7 @@ int get_bit(BitBoard board, int bit);
 void set_bit(BitBoard *board, int bit, int value);
 void make_move(Move move);
 void unmake_move(Move move);
+void generate_moves(Move moves[80]);
 void output_bitboard(BitBoard board);
 void output_board();
 

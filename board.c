@@ -57,7 +57,10 @@ void make_move(Move move) {
         set_bit(&board.redR, move.to, 1);
         set_bit(&board.blueS, move.to, 0);
     } else {
-        printf("Invalid move\n");
+        printf("Invalid movea %d %d %d\n", move.from, move.to, move.capture);
+        
+        output_board();
+
     } 
 }
 
@@ -87,12 +90,89 @@ void unmake_move(Move move) {
         set_bit(&board.redR, move.to, 0);
         set_bit(&board.blueS, move.to, move.capture);
     } else {
-        printf("Invalid move\n");
+        printf("Invalid moveb %d %d %d\n", move.from, move.to, move.capture);
+        
+        output_board();
     } 
 }
 
 void generate_moves(Move moves[80]) {
-    // TODO: yeah this
+    int moves_ptr = 0;
+    if (turn == 0) {
+        for (int i = 0; i < 81; i++) {
+            if ((board.blueP >> i) & 1) {
+                BitBoard move_bb = move_cache[i] & ~(board.blueP | board.blueR | board.blueS | board.redP | board.redS);
+                for (int j = 0; j < 81; j++) { 
+                    if ((move_bb >> j) & 1) {
+                        Move move;
+                        move.from = i;
+                        move.to = j;
+                        move.capture = (int)(board.redR >> j) & 1;
+                        moves[moves_ptr++] = move;
+                    }
+                }
+            } else if ((board.blueS >> i) & 1) {
+                BitBoard move_bb = move_cache[i] & ~(board.blueP | board.blueR | board.blueS | board.redR | board.redS);
+                for (int j = 0; j < 81; j++) { 
+                    if ((move_bb >> j) & 1) {
+                        Move move;
+                        move.from = i;
+                        move.to = j;
+                        move.capture = (int)(board.redP >> j) & 1;
+                        moves[moves_ptr++] = move;
+                    }
+                }
+            } else if ((board.blueR >> i) & 1) {
+                BitBoard move_bb = move_cache[i] & ~(board.blueP | board.blueR | board.blueS | board.redP | board.redR);
+                for (int j = 0; j < 81; j++) { 
+                    if ((move_bb >> j) & 1) {
+                        Move move;
+                        move.from = i;
+                        move.to = j;
+                        move.capture = (int)(board.redS >> j) & 1;
+                        moves[moves_ptr++] = move;
+                    }
+                }
+            }
+        }
+    } else {
+        for (int i = 0; i < 81; i++) { 
+            if ((board.redP >> i) & 1) {
+                BitBoard move_bb = move_cache[i] & ~(board.redP | board.redR | board.redS | board.blueP | board.blueS);
+                for (int j = 0; j < 81; j++) { 
+                    if ((move_bb >> j) & 1) {
+                        Move move;
+                        move.from = i;
+                        move.to = j;
+                        move.capture = (int)(board.blueR >> j) & 1;
+                        moves[moves_ptr++] = move;
+                    }
+                }
+            } else if ((board.redS >> i) & 1) {
+                BitBoard move_bb = move_cache[i] & ~(board.redP | board.redR | board.redS | board.blueR | board.blueS);
+                for (int j = 0; j < 81; j++) { 
+                    if ((move_bb >> j) & 1) {
+                        Move move;
+                        move.from = i;
+                        move.to = j;
+                        move.capture = (int)(board.blueP >> j) & 1;
+                        moves[moves_ptr++] = move;
+                    }
+                }
+            } else if ((board.redR >> i) & 1) {
+                BitBoard move_bb = move_cache[i] & ~(board.redP | board.redR | board.redS | board.blueP | board.blueR);
+                for (int j = 0; j < 81; j++) { 
+                    if ((move_bb >> j) & 1) {
+                        Move move;
+                        move.from = i;
+                        move.to = j;
+                        move.capture = (int)(board.blueS >> j) & 1;
+                        moves[moves_ptr++] = move;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void output_bitboard(BitBoard board) {

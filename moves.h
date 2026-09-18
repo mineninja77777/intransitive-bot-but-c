@@ -1,7 +1,7 @@
 #ifndef MOVES_H
 #define MOVES_H
 
-__int128 moves[81] = {
+__int128 move_cache[81] = {
     ((__int128)0x0 << 64) + 0x602,
     ((__int128)0x0 << 64) + 0xe05,
     ((__int128)0x0 << 64) + 0x1c0a,
