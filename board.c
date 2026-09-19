@@ -145,12 +145,17 @@ void unmake_move(Move move) {
 void generate_moves(Move moves[80]) {
     int moves_ptr = 0;
     if (turn == 0) {
-        for (int i = 0; i < 81; i++) {
+        BitBoard all_blue = board.blueP | board.blueR | board.blueS;
+        while (all_blue) {
+            unsigned long long lower_pieces = all_blue & ULONG_LONG_MAX;
+            int i = (lower_pieces != 0 ? __builtin_ctzll(lower_pieces) : (__builtin_ctzll(all_blue >> 64) + 64));
+            all_blue ^= (BitBoard)1 << i;
+
             if ((board.blueP >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.blueP | board.blueR | board.blueS | board.redP | board.redS);
                 while (move_bb) {
-                    unsigned long long lower = move_bb & ULONG_LONG_MAX;
-                    int j = (lower != 0 ? __builtin_ctzll(lower) : (__builtin_ctzll(move_bb >> 64) + 64));
+                    unsigned long long lower_move = move_bb & ULONG_LONG_MAX;
+                    int j = (lower_move != 0 ? __builtin_ctzll(lower_move) : (__builtin_ctzll(move_bb >> 64) + 64));
                     Move move;
                     move.from = i;
                     move.to = j;
@@ -188,7 +193,12 @@ void generate_moves(Move moves[80]) {
             }
         }
     } else {
-        for (int i = 0; i < 81; i++) { 
+        BitBoard all_red = board.redP | board.redR | board.redS;
+        while (all_red) {
+            unsigned long long lower_pieces = all_red & ULONG_LONG_MAX;
+            int i = (lower_pieces != 0 ? __builtin_ctzll(lower_pieces) : (__builtin_ctzll(all_red >> 64) + 64));
+            all_red ^= (BitBoard)1 << i;
+        
             if ((board.redP >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.redP | board.redR | board.redS | board.blueP | board.blueS);
                 while (move_bb) {

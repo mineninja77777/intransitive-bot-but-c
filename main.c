@@ -25,10 +25,8 @@ void test_move_gen(int depth) {
     }
 }
 
-int main() {
+void benchmark() {
     init_board();
-    
-
     for(int i = 1; i < 10; i++) {
         clock_t start, stop;
         count = 0;
@@ -37,6 +35,13 @@ int main() {
         stop = clock();
         printf("%d, %dms, %d\n", i, (int)((double)(stop-start) / CLOCKS_PER_SEC * 1000), count);
     }
+}
+
+int main() {
+    // init_board();
+
+    benchmark();
+
     // load_fen("9/4p2p1/2p6/4p4/3p5/9/9/1p7/9 b");
     // output_board();
     // Move moves[80] = {(Move){0, 0, 0}};
