@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "moves.h"
 #include "move.h"
@@ -19,6 +20,49 @@ void init_board() {
     turn = 0;
 }
 
+void load_fen(char *fen) {
+    board = (Board){0, 0, 0, 0, 0, 0};
+
+    // assumes fen is valid
+    int x = 0;
+    int y = 8;
+    while (*fen != '\0' && *fen != ' ') {
+        if (*fen == '/') {
+            y--;
+            x = 0;
+        } else if (isdigit(*fen)) {
+            x += *fen - '0';
+        } else if (*fen == 'r') {
+            board.blueR |= (BitBoard)1 << (9*y + x);
+            x++;
+        } else if (*fen == 's') {
+            board.blueS |= (BitBoard)1 << (9*y + x);
+            x++;
+        } else if (*fen == 'p') {
+            board.blueP |= (BitBoard)1 << (9*y + x);
+            x++;
+        } else if (*fen == 'R') {
+            board.redR |= (BitBoard)1 << (9*y + x);
+            x++;
+        } else if (*fen == 'S') {
+            board.redS |= (BitBoard)1 << (9*y + x);
+            x++;
+        } else if (*fen == 'P') {
+            board.redP |= (BitBoard)1 << (9*y + x);
+            x++;
+        } else {
+            fprintf(stderr, "mysterious....\n");
+        }
+        fen++;
+    }
+    fen++;
+    if (*fen == 'b') {
+        turn = 0;
+    } else if (*fen == 'r') {
+        turn = 1;
+    }
+}
+
 int get_bit(BitBoard board, int bit) {
     return (board >> bit) & 1;
 }
@@ -32,6 +76,7 @@ void set_bit(BitBoard *board, int bit, int value) {
 
 // assumes move is valid
 void make_move(Move move) {
+    turn = ~turn;
     if (get_bit(board.blueP, move.from)) {
         set_bit(&board.blueP, move.from, 0);
         set_bit(&board.blueP, move.to, 1);
@@ -65,6 +110,7 @@ void make_move(Move move) {
 }
 
 void unmake_move(Move move) {
+    turn = ~turn;
     if (get_bit(board.blueP, move.to)) {
         set_bit(&board.blueP, move.from, 1);
         set_bit(&board.blueP, move.to, 0);

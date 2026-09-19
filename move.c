@@ -32,3 +32,12 @@ Move process_move(char* movestr) {
     }
     return move;
 }
+
+void output_move(Move move) {
+    char from_x = (move.from % 9) + 'a';
+    char from_y = (8 - move.from / 9) + '1';
+    char to_x = (move.to % 9) + 'a';
+    char to_y = (8 - move.to / 9) + '1';
+    char capture = move.capture ? 'x' : '-';
+    printf("%c%c%c%c%c\n", from_x, from_y, capture, to_x, to_y);
+}

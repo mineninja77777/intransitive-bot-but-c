@@ -12,6 +12,7 @@ typedef struct {
 } Board;
 
 void init_board();
+void load_fen(char *fen);
 int get_bit(BitBoard board, int bit);
 void set_bit(BitBoard *board, int bit, int value);
 void make_move(Move move);

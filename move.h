@@ -8,5 +8,6 @@ typedef struct {
 } Move;
 
 Move process_move(char* movestr);
+void output_move(Move move);
 
 #endif

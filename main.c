@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "move.h"
 #include "board.h"
 
-int counts[6] = {0};
+int count = 0;
 
 void test_move_gen(int depth) {
-    counts[depth] += 1;
-    
-    if (depth == 0) { return; }
+    if (depth == 0) { 
+        count++; 
+        return; 
+    }
     
     Move moves[80] = {(Move){0, 0, 0}};
     generate_moves(moves);
@@ -25,10 +27,23 @@ void test_move_gen(int depth) {
 
 int main() {
     init_board();
-    output_board();
-    test_move_gen(5);
-    for(int i = 0; i < 6; i++) {
-        printf("%d, %d\n", i, counts[i]);
-    }
     
+
+    for(int i = 1; i < 10; i++) {
+        clock_t start, stop;
+        count = 0;
+        start = clock();
+        test_move_gen(i);
+        stop = clock();
+        printf("%d, %dms, %d\n", i, (int)((double)(stop-start) / CLOCKS_PER_SEC * 1000), count);
+    }
+    // load_fen("6pSs/6RPR/7r1/7S1/9/1r7/1S7/sps6/RrP6 r");
+    // output_board();
+    // Move moves[80] = {(Move){0, 0, 0}};
+    // generate_moves(moves);
+    // Move *curr = &(moves[0]);
+    // while (!(curr->from == 0 && curr->to == 0 && curr->capture == 0)) {
+    //     output_move(*curr);
+    //     curr += 1;
+    // }
 }
