@@ -37,7 +37,7 @@ int main() {
         stop = clock();
         printf("%d, %dms, %d\n", i, (int)((double)(stop-start) / CLOCKS_PER_SEC * 1000), count);
     }
-    // load_fen("6pSs/6RPR/7r1/7S1/9/1r7/1S7/sps6/RrP6 r");
+    // load_fen("9/4p2p1/2p6/4p4/3p5/9/9/1p7/9 b");
     // output_board();
     // Move moves[80] = {(Move){0, 0, 0}};
     // generate_moves(moves);

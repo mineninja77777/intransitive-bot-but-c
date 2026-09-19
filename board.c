@@ -148,36 +148,42 @@ void generate_moves(Move moves[80]) {
         for (int i = 0; i < 81; i++) {
             if ((board.blueP >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.blueP | board.blueR | board.blueS | board.redP | board.redS);
-                for (int j = 0; j < 81; j++) { 
-                    if ((move_bb >> j) & 1) {
-                        Move move;
-                        move.from = i;
-                        move.to = j;
-                        move.capture = (int)(board.redR >> j) & 1;
-                        moves[moves_ptr++] = move;
-                    }
+                while (move_bb) {
+                    unsigned long long lower = move_bb & ULONG_LONG_MAX;
+                    int j = (lower != 0 ? __builtin_ctzll(lower) : (__builtin_ctzll(move_bb >> 64) + 64));
+                    Move move;
+                    move.from = i;
+                    move.to = j;
+                    move.capture = (int)(board.redR >> j) & 1;
+                    moves[moves_ptr++] = move;
+
+                    move_bb ^= (BitBoard)1 << j;
                 }
             } else if ((board.blueS >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.blueP | board.blueR | board.blueS | board.redR | board.redS);
-                for (int j = 0; j < 81; j++) { 
-                    if ((move_bb >> j) & 1) {
-                        Move move;
-                        move.from = i;
-                        move.to = j;
-                        move.capture = (int)(board.redP >> j) & 1;
-                        moves[moves_ptr++] = move;
-                    }
+                while (move_bb) {
+                    unsigned long long lower = move_bb & ULONG_LONG_MAX;
+                    int j = (lower != 0 ? __builtin_ctzll(lower) : (__builtin_ctzll(move_bb >> 64) + 64));
+                    Move move;
+                    move.from = i;
+                    move.to = j;
+                    move.capture = (int)(board.redP >> j) & 1;
+                    moves[moves_ptr++] = move;
+
+                    move_bb ^= (BitBoard)1 << j;
                 }
             } else if ((board.blueR >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.blueP | board.blueR | board.blueS | board.redP | board.redR);
-                for (int j = 0; j < 81; j++) { 
-                    if ((move_bb >> j) & 1) {
-                        Move move;
-                        move.from = i;
-                        move.to = j;
-                        move.capture = (int)(board.redS >> j) & 1;
-                        moves[moves_ptr++] = move;
-                    }
+                while (move_bb) {
+                    unsigned long long lower = move_bb & ULONG_LONG_MAX;
+                    int j = (lower != 0 ? __builtin_ctzll(lower) : (__builtin_ctzll(move_bb >> 64) + 64));
+                    Move move;
+                    move.from = i;
+                    move.to = j;
+                    move.capture = (int)(board.redS >> j) & 1;
+                    moves[moves_ptr++] = move;
+
+                    move_bb ^= (BitBoard)1 << j;
                 }
             }
         }
@@ -185,36 +191,42 @@ void generate_moves(Move moves[80]) {
         for (int i = 0; i < 81; i++) { 
             if ((board.redP >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.redP | board.redR | board.redS | board.blueP | board.blueS);
-                for (int j = 0; j < 81; j++) { 
-                    if ((move_bb >> j) & 1) {
-                        Move move;
-                        move.from = i;
-                        move.to = j;
-                        move.capture = (int)(board.blueR >> j) & 1;
-                        moves[moves_ptr++] = move;
-                    }
+                while (move_bb) {
+                    unsigned long long lower = move_bb & ULONG_LONG_MAX;
+                    int j = (lower != 0 ? __builtin_ctzll(lower) : (__builtin_ctzll(move_bb >> 64) + 64));
+                    Move move;
+                    move.from = i;
+                    move.to = j;
+                    move.capture = (int)(board.blueR >> j) & 1;
+                    moves[moves_ptr++] = move;
+
+                    move_bb ^= (BitBoard)1 << j;
                 }
             } else if ((board.redS >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.redP | board.redR | board.redS | board.blueR | board.blueS);
-                for (int j = 0; j < 81; j++) { 
-                    if ((move_bb >> j) & 1) {
-                        Move move;
-                        move.from = i;
-                        move.to = j;
-                        move.capture = (int)(board.blueP >> j) & 1;
-                        moves[moves_ptr++] = move;
-                    }
+                while (move_bb) {
+                    unsigned long long lower = move_bb & ULONG_LONG_MAX;
+                    int j = (lower != 0 ? __builtin_ctzll(lower) : (__builtin_ctzll(move_bb >> 64) + 64));
+                    Move move;
+                    move.from = i;
+                    move.to = j;
+                    move.capture = (int)(board.blueP >> j) & 1;
+                    moves[moves_ptr++] = move;
+
+                    move_bb ^= (BitBoard)1 << j;
                 }
             } else if ((board.redR >> i) & 1) {
                 BitBoard move_bb = move_cache[i] & ~(board.redP | board.redR | board.redS | board.blueP | board.blueR);
-                for (int j = 0; j < 81; j++) { 
-                    if ((move_bb >> j) & 1) {
-                        Move move;
-                        move.from = i;
-                        move.to = j;
-                        move.capture = (int)(board.blueS >> j) & 1;
-                        moves[moves_ptr++] = move;
-                    }
+                while (move_bb) {
+                    unsigned long long lower = move_bb & ULONG_LONG_MAX;
+                    int j = (lower != 0 ? __builtin_ctzll(lower) : (__builtin_ctzll(move_bb >> 64) + 64));
+                    Move move;
+                    move.from = i;
+                    move.to = j;
+                    move.capture = (int)(board.blueS >> j) & 1;
+                    moves[moves_ptr++] = move;
+
+                    move_bb ^= (BitBoard)1 << j;
                 }
             }
         }
