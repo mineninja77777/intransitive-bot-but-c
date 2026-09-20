@@ -27,7 +27,7 @@ void test_move_gen(int depth) {
 }
 
 void benchmark() {
-    for(int i = 1; i < 6; i++) {
+    for(int i = 1; i < 8; i++) {
         clock_t start, stop;
         count = 0;
         start = clock();
@@ -38,8 +38,8 @@ void benchmark() {
 }
 
 int main() {
-    // init_board();
-    load_fen("9/9/9/9/9/9/s8/rRp6/RPS6 r");
+    init_board();
+    // load_fen("9/9/9/9/9/9/s8/rRp6/RPS6 r");
     benchmark();
 
     // Move move;

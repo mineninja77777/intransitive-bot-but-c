@@ -13,3 +13,11 @@ Version with more bitscan
 4, 147ms, 2146591
 5, 5100ms, 93961519
 6, 279055ms, -193990776
+
+Version with altered bitboards
+1, 0ms, 36
+2, 0ms, 1293
+3, 3ms, 52758
+4, 128ms, 2146591
+5, 5721ms, 93961519
+6, 245244ms, -193990776

@@ -95,15 +95,16 @@ void make_move(Move move) {
 void unmake_move(Move move) {
     turn = ~turn;
     
-    BitBoard temp = board.blue & (BitBoard)1 << move.to;
-    board.blue ^= temp;
-    board.blue |= (BitBoard)!!temp << move.from;
-    board.red |= temp & ((BitBoard)move.capture << move.to);
-
-    temp = board.red & (BitBoard)1 << move.to;
-    board.red ^= temp;
-    board.red |= (BitBoard)!!temp << move.from;
-    board.blue |= temp & ((BitBoard)move.capture << move.to);
+    BitBoard tempbl = board.blue & (BitBoard)1 << move.to;
+    board.blue ^= tempbl;
+    board.blue |= (BitBoard)!!tempbl << move.from;
+    
+    BitBoard tempre = board.red & (BitBoard)1 << move.to;
+    board.red ^= tempre;
+    board.red |= (BitBoard)!!tempre << move.from;
+    
+    board.red |= tempbl & ((BitBoard)move.capture << move.to);
+    board.blue |= tempre & ((BitBoard)move.capture << move.to);
 
     BitBoard tempr = board.r & (BitBoard)1 << move.to;
     board.r ^= tempr;
@@ -221,6 +222,11 @@ void generate_moves(Move moves[80]) {
             }
         }
     }
+    if (moves_ptr >= 80) {
+        printf("%d", moves_ptr);
+        output_board();
+
+    }
 }
 
 void output_bitboard(BitBoard board) {
@@ -258,16 +264,5 @@ void output_board() {
     for (int i = 1; i < 9; i++) {
         out[i*10-1] = '\n';
     }
-    printf("b\n");
-    output_bitboard(board.blue);
-    printf("r\n");
-    output_bitboard(board.red);
-    printf("r\n");
-    output_bitboard(board.r);
-    printf("s\n");
-    output_bitboard(board.s);
-    printf("p\n");
-    output_bitboard(board.p);
-    
     printf("%s \n", out);
 }
