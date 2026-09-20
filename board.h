@@ -3,12 +3,11 @@
 
 typedef unsigned __int128 BitBoard;
 typedef struct {
-    BitBoard blueR;
-    BitBoard blueS;
-    BitBoard blueP;
-    BitBoard redR;
-    BitBoard redS;
-    BitBoard redP;
+    BitBoard blue;
+    BitBoard red;
+    BitBoard r;
+    BitBoard s;
+    BitBoard p;
 } Board;
 
 void init_board();

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "move.h"
 #include "board.h"
@@ -26,8 +27,7 @@ void test_move_gen(int depth) {
 }
 
 void benchmark() {
-    init_board();
-    for(int i = 1; i < 10; i++) {
+    for(int i = 1; i < 6; i++) {
         clock_t start, stop;
         count = 0;
         start = clock();
@@ -39,11 +39,22 @@ void benchmark() {
 
 int main() {
     // init_board();
-
+    load_fen("9/9/9/9/9/9/s8/rRp6/RPS6 r");
     benchmark();
 
-    // load_fen("9/4p2p1/2p6/4p4/3p5/9/9/1p7/9 b");
-    // output_board();
+    // Move move;
+    // while (1) {
+    //     char move_s[20];
+    //     fgets(move_s, 19, stdin);
+    //     if (strncmp(move_s, "undo", 4) == 0) {
+    //         unmake_move(move);
+    //     } else {
+    //         move = process_move(move_s);
+    //         make_move(move);
+    //     }
+    //     output_board();
+    // }
+
     // Move moves[80] = {(Move){0, 0, 0}};
     // generate_moves(moves);
     // Move *curr = &(moves[0]);
