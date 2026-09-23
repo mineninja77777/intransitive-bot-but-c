@@ -8,7 +8,7 @@
 // won't validate
 Move process_move(char* movestr) {
     int length = strlen(movestr)/sizeof(movestr[0]);
-    printf("move len: %d\n", length);
+    // printf("move len: %d\n", length);
     if (length != 6) {
         printf("move is invalid\n");
         return (Move){0, 0, 0};

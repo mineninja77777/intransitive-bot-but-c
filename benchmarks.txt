@@ -1,3 +1,4 @@
+MOVE GEN
 Version with bitscan
 1, 0ms, 36
 2, 0ms, 1293

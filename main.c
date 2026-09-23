@@ -6,8 +6,11 @@
 
 #include "move.h"
 #include "board.h"
+#include "engine.h"
 
-int count = 0;
+// https://rps.henhen1227.com/
+
+unsigned int count = 0;
 
 void test_move_gen(int depth) {
     if (depth == 0) { 
@@ -40,26 +43,22 @@ void benchmark() {
 int main() {
     init_board();
     // load_fen("9/9/9/9/9/9/s8/rRp6/RPS6 r");
-    benchmark();
+    // benchmark();
 
     // Move move;
-    // while (1) {
-    //     char move_s[20];
-    //     fgets(move_s, 19, stdin);
-    //     if (strncmp(move_s, "undo", 4) == 0) {
-    //         unmake_move(move);
-    //     } else {
-    //         move = process_move(move_s);
-    //         make_move(move);
-    //     }
-    //     output_board();
-    // }
+    while (1) {
+        // char move_s[20];
+        // fgets(move_s, 19, stdin);
+        
+        // Move move = process_move(move_s);
+        // make_move(move);
+        // output_board();
 
-    // Move moves[80] = {(Move){0, 0, 0}};
-    // generate_moves(moves);
-    // Move *curr = &(moves[0]);
-    // while (!(curr->from == 0 && curr->to == 0 && curr->capture == 0)) {
-    //     output_move(*curr);
-    //     curr += 1;
-    // }
+
+        make_move(best_move());
+        // output_board();
+        if (game_state() != 0) {
+            printf(game_state() == 1 ? "Blue wins" : "Red wins");
+        }
+    }
 }

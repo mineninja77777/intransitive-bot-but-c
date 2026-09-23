@@ -2,12 +2,24 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "moves.h"
+#include "precomputed.h"
 #include "move.h"
 #include "board.h"
 
 Board board;
-int turn; // 0: blue, 1: red
+int turn; // -1: blue, 1: red
+
+int get_bit(BitBoard board, int bit) {
+    return (board >> bit) & 1;
+}
+
+void set_bit(BitBoard *board, int bit, int value) {
+    if (get_bit(*board, bit) == value) {
+        return;
+    }
+    (*board) ^= (BitBoard)1 << bit;
+}
+
 
 void init_board() {
     load_fen("9/3rp4/2rps4/1rps5/1ps3SP1/5SPR1/4SPR2/4PR3/9 b");
@@ -49,26 +61,31 @@ void load_fen(char *fen) {
     }
     fen++;
     if (*fen == 'b') {
-        turn = 0;
+        turn = -1;
     } else if (*fen == 'r') {
         turn = 1;
     }
 }
 
-int get_bit(BitBoard board, int bit) {
-    return (board >> bit) & 1;
-}
+int get_turn() { return turn; }
 
-void set_bit(BitBoard *board, int bit, int value) {
-    if (get_bit(*board, bit) == value) {
-        return;
+Board get_board() { return board; }
+
+// returns 0 if the game is still going, 1 if blue win, 2 if draw, and 3 if red win
+// 200 move rule is lwk still to be coded
+int game_state() {
+    if ((board.blue >> 8) & 1) {
+        return 1;
+    } else if ((board.red >> 72) & 1) {
+        return 3;
+    } else {
+        return 0;
     }
-    (*board) ^= (BitBoard)1 << bit;
 }
 
 // assumes move is valid
 void make_move(Move move) {
-    turn = ~turn;
+    turn *= -1;
     
     BitBoard temp = board.blue & (BitBoard)1 << move.from;
     board.blue ^= temp;
@@ -93,7 +110,7 @@ void make_move(Move move) {
 }
 
 void unmake_move(Move move) {
-    turn = ~turn;
+    turn *= -1;
     
     BitBoard tempbl = board.blue & (BitBoard)1 << move.to;
     board.blue ^= tempbl;
@@ -129,7 +146,7 @@ void generate_moves(Move moves[80]) {
     BitBoard our_pieces;
     BitBoard enemy_pieces;
     
-    if (turn == 0) {
+    if (turn == -1) {
         our_pieces = board.blue;
         enemy_pieces = board.red;
     } else {
