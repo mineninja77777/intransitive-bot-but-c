@@ -54,11 +54,18 @@ int main() {
         // make_move(move);
         // output_board();
 
+        Move move = best_move();
 
-        make_move(best_move());
-        // output_board();
+        if (move.from == 0 && move.to == 0 && move.capture == 0) {
+            fprintf(stderr, "bad");
+            break;
+        }
+        make_move(move);
+        output_board();
+        printf("\n");
         if (game_state() != 0) {
             printf(game_state() == 1 ? "Blue wins" : "Red wins");
+            break;
         }
     }
 }

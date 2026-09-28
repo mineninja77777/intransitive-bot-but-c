@@ -7,22 +7,22 @@
 #include "engine.h"
 
 #define popcnt(bb) (__builtin_popcountll(bb >> 64) + __builtin_popcountll(bb & ULLONG_MAX))
+#define min __min
+#define max __max
 
 Move best_move() {
     
     int turn = get_turn();
 
-    int best_eval = __INT16_MAX__ * (turn);
+    int best_eval = (turn == -1 ? INT_MIN : INT_MAX);
     Move best_move = (Move){0,0,0};
 
     Move moves[80] = {(Move){0, 0, 0}};
     generate_moves(moves);
     Move *curr = &(moves[0]);
-    // output_move(*curr);
     while (!(curr->from == 0 && curr->to == 0 && curr->capture == 0)) {
         make_move(*curr);
-        int val = minimax(3);
-        // printf("%d\n", turn);
+        int val = minimax(4, 4, INT_MIN, INT_MAX);
         unmake_move(*curr);
         if ((val >= best_eval && turn == -1) || (val <= best_eval && turn == 1)) {
             best_eval = val;
@@ -31,13 +31,13 @@ Move best_move() {
 
         curr += 1;
     }
-    output_move(best_move);
     return best_move;
 }
 
-int minimax(int depth) {
+// alpha = INT_MIN, beta = INT_MAX
+int minimax(int depth, int max_depth, int alpha, int beta) {
     if (game_state() != 0) {
-        return ((2 - game_state()) * __INT16_MAX__);
+        return ((game_state() - 2) == -1 ? (INT_MAX - (max_depth - depth)) : (INT_MIN + (max_depth - depth)));
     }
     if (depth == 0) {
         return eval();
@@ -45,24 +45,35 @@ int minimax(int depth) {
 
     int turn = get_turn();
 
-    int best_eval = __INT16_MAX__ * (turn);
+    int eval = (turn == -1 ? INT_MIN : INT_MAX);
 
     Move moves[80] = {(Move){0, 0, 0}};
     generate_moves(moves);
     Move *curr = &(moves[0]);
     while (!(curr->from == 0 && curr->to == 0 && curr->capture == 0)) {
-        make_move(*curr);
-        int val = minimax(depth-1);
-        // printf("best_eval: %d eval: %d, turn: %d\n", best_eval, val, turn);
-        unmake_move(*curr);
-        if ((val > best_eval && turn == -1) || (val < best_eval && turn == 1)) {
-            best_eval = val;
-        }
+        if (turn == -1) {
+            make_move(*curr);
+            eval = max(eval, minimax(depth-1, max_depth, alpha, beta));
+            unmake_move(*curr);
 
+            if (eval >= beta) {
+                break;
+            }
+            alpha = max(alpha, eval);
+        } else {
+            make_move(*curr);
+            eval = min(eval, minimax(depth-1, max_depth, alpha, beta));
+            unmake_move(*curr);
+
+            if (eval <= alpha) {
+                break;
+            }
+            beta = min(beta, eval);
+        }
         curr += 1;
     }
 
-    return best_eval;
+    return eval;
 }
 
 int eval() {
